@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I’m Sorry 💗</title>
+<style>
+:root{
+  --bg1:#ffe3ec;--bg2:#ffd0e0;--card:#ffffffd9;--text:#4a2331;--muted:#8a5568;
+  --accent:#e63e6d;--accent2:#ff7aa2;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg1:#2a1020;--bg2:#3d1730;--card:#3a1b2dd9;--text:#ffe9f0;--muted:#e5b3c6;--accent:#ff5c8a;--accent2:#ff93b3}
+}
+:root[data-theme="dark"]{--bg1:#2a1020;--bg2:#3d1730;--card:#3a1b2dd9;--text:#ffe9f0;--muted:#e5b3c6;--accent:#ff5c8a;--accent2:#ff93b3}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  font-family:"Poppins","Segoe UI",system-ui,sans-serif;color:var(--text);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));overflow:hidden}
+.card{position:relative;z-index:2;width:100%;max-width:460px;text-align:center;background:var(--card);
+  backdrop-filter:blur(10px);border-radius:28px;padding:36px 26px;box-shadow:0 20px 50px rgba(230,62,109,.25);
+  animation:pop .8s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.emoji{font-size:64px;display:inline-block;animation:beat 1.4s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.2)}30%{transform:scale(1)}45%{transform:scale(1.15)}}
+h1{font-family:"Dancing Script","Brush Script MT",cursive;font-size:clamp(34px,9vw,46px);margin:8px 0 14px;color:var(--accent)}
+#msg{min-height:150px;font-size:16.5px;line-height:1.7;color:var(--text);white-space:pre-line}
+.cursor{display:inline-block;width:2px;height:1em;background:var(--accent);margin-left:2px;vertical-align:text-bottom;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#ask{margin-top:10px;opacity:0;transform:translateY(10px);transition:.6s;pointer-events:none}
+#ask.show{opacity:1;transform:none;pointer-events:auto}
+#ask p{font-weight:600;font-size:19px;margin:0 0 16px}
+.btns{display:flex;gap:14px;justify-content:center;align-items:center;min-height:56px}
+button{font:inherit;font-weight:600;border:0;border-radius:999px;padding:13px 28px;cursor:pointer;transition:transform .15s}
+#yes{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 8px 20px rgba(230,62,109,.4)}
+#yes:hover{transform:scale(1.08)}
+#no{background:transparent;color:var(--muted);border:2px solid var(--muted)}
+#win{display:none}
+#win h2{font-family:"Dancing Script","Brush Script MT",cursive;font-size:38px;color:var(--accent);margin:6px 0}
+#win p{line-height:1.7}
+.heart{position:fixed;bottom:-40px;z-index:1;pointer-events:none;animation:rise linear forwards;user-select:none}
+@keyframes rise{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+.conf{position:fixed;z-index:5;pointer-events:none;animation:burst 1.6s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(360deg);opacity:0}}
+@media (prefers-reduced-motion: reduce){.heart{display:none}.emoji{animation:none}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="main">
+    <div class="emoji">🥺</div>
+    <h1 id="title">I’m Sorry</h1>
+    <div id="msg"></div>
+    <div id="ask">
+      <p>Will you forgive me? 💕</p>
+      <div class="btns">
+        <button id="yes">Yes, I forgive you 💖</button>
+        <button id="no">No</button>
+      </div>
+    </div>
+  </div>
+  <div id="win">
+    <div class="emoji">🥰</div>
+    <h2>Thank you, my love!</h2>
+    <p>You just made me the happiest person alive.<br>I promise to listen better, love harder,<br>and always choose us. 💗</p>
+    <p style="font-size:34px;margin:6px 0 0">💞 ✨ 💞</p>
+  </div>
+</div>
+
+<script>
+// Tip: open this page as ...#Priya to put her name in the title
+var name = "";
+try { name = decodeURIComponent(location.hash.slice(1)).slice(0, 30); } catch (e) {}
+var who = name || "my love";
+document.getElementById("title").textContent = name ? "I’m Sorry, " + name : "I’m Sorry";
+
+var text = "Hey " + who + "…\n\n" +
+  "I know I hurt you, and that’s the last thing I ever want to do. " +
+  "I’m truly sorry. You mean the world to me, and I hate seeing you upset because of me.\n\n" +
+  "I’m going to do better. Please give me a chance to make it right. 💗";
+
+var msg = document.getElementById("msg"), i = 0;
+var cur = document.createElement("span"); cur.className = "cursor";
+function type(){
+  if (i < text.length){
+    msg.textContent = text.slice(0, ++i); msg.appendChild(cur);
+    setTimeout(type, text[i-1] === "\n" ? 350 : 38);
+  } else {
+    cur.remove();
+    document.getElementById("ask").classList.add("show");
+  }
+}
+setTimeout(type, 900);
+
+// Floating hearts
+var icons = ["💗","💖","💕","💞","🌸"];
+setInterval(function(){
+  var h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = icons[Math.floor(Math.random()*icons.length)];
+  h.style.left = Math.random()*100 + "vw";
+  h.style.fontSize = (16 + Math.random()*26) + "px";
+  h.style.animationDuration = (6 + Math.random()*6) + "s";
+  h.style.opacity = .5 + Math.random()*.5;
+  document.body.appendChild(h);
+  setTimeout(function(){ h.remove(); }, 12500);
+}, 450);
+
+// The "No" button runs away
+var no = document.getElementById("no");
+function dodge(e){
+  if (e) e.preventDefault();
+  no.style.position = "fixed";
+  var x = Math.random() * (window.innerWidth - no.offsetWidth - 20) + 10;
+  var y = Math.random() * (window.innerHeight - no.offsetHeight - 20) + 10;
+  no.style.left = x + "px"; no.style.top = y + "px";
+  no.style.zIndex = 4;
+  no.textContent = ["No","Are you sure?","Please? 🥺","Pretty please?","Nope, can’t!"][Math.floor(Math.random()*5)];
+}
+no.addEventListener("mouseover", dodge);
+no.addEventListener("touchstart", dodge, {passive:false});
+no.addEventListener("click", dodge);
+
+// Yes!
+document.getElementById("yes").addEventListener("click", function(){
+  document.getElementById("main").style.display = "none";
+  document.getElementById("win").style.display = "block";
+  no.remove();
+  for (var n = 0; n < 70; n++){
+    var c = document.createElement("div");
+    c.className = "conf";
+    c.textContent = icons[n % icons.length];
+    c.style.left = "50vw"; c.style.top = "45vh";
+    c.style.fontSize = (16 + Math.random()*20) + "px";
+    var a = Math.random()*Math.PI*2, d = 120 + Math.random()*320;
+    c.style.setProperty("--dx", Math.cos(a)*d + "px");
+    c.style.setProperty("--dy", Math.sin(a)*d + "px");
+    document.body.appendChild(c);
+    (function(el){ setTimeout(function(){ el.remove(); }, 1700); })(c);
+  }
+});
+</script>
+</body>
+</html>
